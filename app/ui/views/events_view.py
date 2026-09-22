@@ -8,7 +8,7 @@ from app.models.event import Event
 from app.services.event_service import get_all_events, delete_event
 from app.ui.views.event_form_dialog import EventFormDialog
 from app.utils.currency import format_currency
-from app.utils.date_utils import format_display_date
+from app.utils.date_utils import format_display_date, MONTH_NAMES
 
 
 class EventsView(QWidget):
@@ -45,11 +45,26 @@ class EventsView(QWidget):
 
         # Search & Filter Row
         filter_layout = QHBoxLayout()
+        filter_layout.setSpacing(12)
+
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search by event, client, or location...")
         self.search_input.setClearButtonEnabled(True)
         self.search_input.textChanged.connect(self.load_events)
-        filter_layout.addWidget(self.search_input)
+        filter_layout.addWidget(self.search_input, 3)
+
+        self.month_combo = QComboBox()
+        self.month_combo.addItems(["All Months"] + list(MONTH_NAMES))
+        self.month_combo.currentIndexChanged.connect(self.load_events)
+        filter_layout.addWidget(self.month_combo, 1)
+
+        self.year_combo = QComboBox()
+        self.year_combo.addItem("All Years")
+        current_yr = datetime.now().year
+        for yr in range(current_yr - 5, current_yr + 6):
+            self.year_combo.addItem(str(yr))
+        self.year_combo.currentIndexChanged.connect(self.load_events)
+        filter_layout.addWidget(self.year_combo, 1)
 
         layout.addLayout(filter_layout)
 
@@ -78,7 +93,25 @@ class EventsView(QWidget):
 
     def load_events(self):
         query = self.search_input.text().strip()
-        self.events_list = get_all_events(query, self.db_path)
+        all_events = get_all_events(query, self.db_path)
+
+        sel_month = self.month_combo.currentIndex()
+        sel_year_text = self.year_combo.currentText()
+
+        filtered_events = []
+        for ev in all_events:
+            if ev.event_date:
+                try:
+                    ev_date = datetime.strptime(ev.event_date, "%Y-%m-%d").date()
+                    if sel_month > 0 and ev_date.month != sel_month:
+                        continue
+                    if sel_year_text != "All Years" and str(ev_date.year) != sel_year_text:
+                        continue
+                except ValueError:
+                    pass
+            filtered_events.append(ev)
+
+        self.events_list = filtered_events
 
         self.table.setRowCount(0)
         for row_idx, ev in enumerate(self.events_list):
@@ -118,9 +151,9 @@ class EventsView(QWidget):
             item_prof = QTableWidgetItem(format_currency(ev.profit))
             item_prof.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
             if ev.profit < 0:
-                item_prof.setForeground(Qt.red)
+                item_prof.setForeground(Qt.GlobalColor.red)
             else:
-                item_prof.setForeground(Qt.darkGreen)
+                item_prof.setForeground(Qt.GlobalColor.darkGreen)
             self.table.setItem(row_idx, 6, item_prof)
 
             # Actions Cell

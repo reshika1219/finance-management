@@ -94,6 +94,10 @@ class MonthlyExpensesDialog(QDialog):
             QMessageBox.warning(self, "Validation Error", "Please enter valid numeric amounts for all expenses.")
             return
 
+        if rent < 0 or elec < 0 or water < 0 or phone < 0 or others < 0:
+            QMessageBox.warning(self, "Validation Error", "Expense amounts cannot be negative.")
+            return
+
         self.expense_data.rent = rent
         self.expense_data.electricity = elec
         self.expense_data.water = water

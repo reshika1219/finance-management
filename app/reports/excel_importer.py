@@ -36,6 +36,11 @@ def read_monthly_excel_file(file_path: str) -> MonthReportRow:
             "Unable to Import File\n\nThis does not appear to be a valid Chirathma Flora monthly report."
         )
 
+    if version != "1":
+        raise ValueError(
+            "Unable to Import File\n\nUnsupported report format version."
+        )
+
     try:
         year = int(meta_dict.get("year", "0"))
         month = int(meta_dict.get("month", "0"))

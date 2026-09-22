@@ -151,7 +151,7 @@ class EventFormDialog(QDialog):
 
         self.cancel_btn = QPushButton("Cancel")
         self.cancel_btn.setProperty("class", "secondary-btn")
-        self.cancel_btn.clicked.connect(self.reject)
+        self.cancel_btn.clicked.connect(self.close)
         btn_layout.addWidget(self.cancel_btn)
 
         self.save_btn = QPushButton("Save Event")
@@ -266,6 +266,11 @@ class EventFormDialog(QDialog):
             self.income_input.setFocus()
             return
 
+        if income < 0:
+            QMessageBox.warning(self, "Validation Error", "Total Income cannot be negative.")
+            self.income_input.setFocus()
+            return
+
         try:
             salary = parse_currency(self.salary_amt.text())
             transport = parse_currency(self.transport_amt.text())
@@ -274,6 +279,10 @@ class EventFormDialog(QDialog):
             utilities = parse_currency(self.utilities_amt.text())
         except ValueError:
             QMessageBox.warning(self, "Validation Error", "Please enter valid numeric expense amounts.")
+            return
+
+        if salary < 0 or transport < 0 or food < 0 or supplier < 0 or utilities < 0:
+            QMessageBox.warning(self, "Validation Error", "Expense amounts cannot be negative.")
             return
 
         qd = self.date_edit.date()

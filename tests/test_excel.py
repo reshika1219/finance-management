@@ -72,3 +72,28 @@ def test_duplicate_reporting_month_rejection(temp_db_with_data):
         for f in (f1, f2):
             if os.path.exists(f):
                 os.remove(f)
+
+
+def test_invalid_format_version_rejection(temp_db_with_data):
+    excel_file = tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False)
+    excel_path = excel_file.name
+    excel_file.close()
+
+    try:
+        generate_monthly_excel(2026, 9, excel_path, temp_db_with_data)
+        import openpyxl
+        wb = openpyxl.load_workbook(excel_path)
+        ws_meta = wb["_ReportMetadata"]
+        # Modify format_version to 2
+        for row in ws_meta.iter_rows():
+            if row[0].value == "format_version":
+                row[1].value = "2"
+        wb.save(excel_path)
+
+        with pytest.raises(ValueError) as exc_info:
+            read_monthly_excel_file(excel_path)
+
+        assert "Unsupported report format version" in str(exc_info.value)
+    finally:
+        if os.path.exists(excel_path):
+            os.remove(excel_path)

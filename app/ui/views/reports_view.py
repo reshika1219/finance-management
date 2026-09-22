@@ -235,9 +235,9 @@ class ReportsView(QWidget):
             item_prof = QTableWidgetItem(format_currency(r.profit))
             item_prof.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
             if r.profit < 0:
-                item_prof.setForeground(Qt.red)
+                item_prof.setForeground(Qt.GlobalColor.red)
             else:
-                item_prof.setForeground(Qt.darkGreen)
+                item_prof.setForeground(Qt.GlobalColor.darkGreen)
             self.table.setItem(row_idx, 3, item_prof)
 
         # Total Row
@@ -260,9 +260,9 @@ class ReportsView(QWidget):
         item_tot_prof = QTableWidgetItem(format_currency(report.total_profit))
         item_tot_prof.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
         if report.total_profit < 0:
-            item_tot_prof.setForeground(Qt.red)
+            item_tot_prof.setForeground(Qt.GlobalColor.red)
         else:
-            item_tot_prof.setForeground(Qt.darkGreen)
+            item_tot_prof.setForeground(Qt.GlobalColor.darkGreen)
         self.table.setItem(tot_idx, 3, item_tot_prof)
 
         # Style total row bold
