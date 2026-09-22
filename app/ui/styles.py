@@ -8,7 +8,7 @@ MAIN_STYLE = """
 QWidget {
     background-color: #F8FAFC;
     color: #0F172A;
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
 }
 
