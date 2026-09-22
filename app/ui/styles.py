@@ -8,7 +8,7 @@ MAIN_STYLE = """
 QWidget {
     background-color: #F8FAFC;
     color: #0F172A;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     font-size: 14px;
 }
 
@@ -90,7 +90,7 @@ QPushButton.primary-btn {
     color: #FFFFFF;
     border: none;
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 8px 18px;
     font-weight: 600;
     font-size: 14px;
 }
@@ -108,13 +108,37 @@ QPushButton.secondary-btn {
     color: #334155;
     border: 1px solid #CBD5E1;
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 8px 18px;
     font-weight: 500;
     font-size: 14px;
 }
 
 QPushButton.secondary-btn:hover {
     background-color: #F1F5F9;
+    color: #0F172A;
+}
+
+QPushButton.icon-btn {
+    background-color: #FFFFFF;
+    color: #334155;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 0px;
+    min-width: 36px;
+    max-width: 36px;
+    min-height: 36px;
+    max-height: 36px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+QPushButton.icon-btn:hover {
+    background-color: #F1F5F9;
+    color: #0F172A;
+}
+
+QPushButton.icon-btn:pressed {
+    background-color: #E2E8F0;
 }
 
 QPushButton.danger-btn {
@@ -122,7 +146,7 @@ QPushButton.danger-btn {
     color: #FFFFFF;
     border: none;
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 8px 18px;
     font-weight: 600;
     font-size: 14px;
 }
@@ -137,6 +161,7 @@ QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox, QDateEdit {
     border: 1px solid #CBD5E1;
     border-radius: 6px;
     padding: 8px 12px;
+    min-height: 20px;
     color: #0F172A;
     font-size: 14px;
 }

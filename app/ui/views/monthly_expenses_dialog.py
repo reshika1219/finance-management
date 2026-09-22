@@ -1,7 +1,7 @@
 from decimal import Decimal
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QMessageBox, QFrame
+    QPushButton, QMessageBox, QFrame, QScrollArea, QWidget
 )
 from PySide6.QtCore import Qt
 from app.models.monthly_expense import MonthlyExpense
@@ -19,18 +19,28 @@ class MonthlyExpensesDialog(QDialog):
         self.expense_data = get_monthly_expense(self.year, self.month, self.db_path)
 
         self.setWindowTitle(f"Monthly Expenses — {get_month_year_display(self.year, self.month)}")
-        self.setFixedSize(450, 520)
+        self.resize(500, 640)
+        self.setMinimumSize(460, 560)
 
         self.init_ui()
         self.load_data()
 
     def init_ui(self):
-        layout = QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # Scroll Area for small laptop screens & high DPI scaling
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+
+        container = QWidget()
+        layout = QVBoxLayout(container)
         layout.setContentsMargins(24, 24, 24, 24)
         layout.setSpacing(16)
 
         # Header
-        title = QLabel(f"Monthly Expenses")
+        title = QLabel("Monthly Expenses")
         title.setProperty("class", "page-title")
         layout.addWidget(title)
 
@@ -38,7 +48,7 @@ class MonthlyExpensesDialog(QDialog):
         subtitle.setStyleSheet("font-size: 16px; font-weight: 600; color: #0284C7;")
         layout.addWidget(subtitle)
 
-        layout.addSpacing(6)
+        layout.addSpacing(4)
 
         # Expense Form Inputs
         self.rent_input = self._add_input_row(layout, "Rent (Rs.)")
@@ -47,7 +57,7 @@ class MonthlyExpensesDialog(QDialog):
         self.phone_input = self._add_input_row(layout, "Telephone Bill (Rs.)")
         self.others_input = self._add_input_row(layout, "Others (Rs.)")
 
-        layout.addStretch()
+        layout.addSpacing(8)
 
         # Action Buttons
         btn_layout = QHBoxLayout()
@@ -55,19 +65,24 @@ class MonthlyExpensesDialog(QDialog):
 
         cancel_btn = QPushButton("Cancel")
         cancel_btn.setProperty("class", "secondary-btn")
+        cancel_btn.setCursor(Qt.PointingHandCursor)
         cancel_btn.clicked.connect(self.reject)
         btn_layout.addWidget(cancel_btn)
 
         save_btn = QPushButton("Save Expenses")
         save_btn.setProperty("class", "primary-btn")
+        save_btn.setCursor(Qt.PointingHandCursor)
         save_btn.clicked.connect(self.on_save)
         btn_layout.addWidget(save_btn)
 
         layout.addLayout(btn_layout)
 
+        scroll.setWidget(container)
+        main_layout.addWidget(scroll)
+
     def _add_input_row(self, layout: QVBoxLayout, label_text: str) -> QLineEdit:
         lbl = QLabel(label_text)
-        lbl.setStyleSheet("font-weight: 500; color: #334155;")
+        lbl.setStyleSheet("font-weight: 500; color: #334155; margin-bottom: 2px;")
         layout.addWidget(lbl)
 
         inp = QLineEdit()

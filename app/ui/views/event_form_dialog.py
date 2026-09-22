@@ -15,8 +15,8 @@ class EventFormDialog(QDialog):
     def __init__(self, event: Event = None, db_path: str = None, parent=None):
         super().__init__(parent)
         self.db_path = db_path
-        self.event = event or Event()
-        self.is_edit = self.event.id is not None
+        self.event_item = event or Event()
+        self.is_edit = self.event_item.id is not None
         self.is_modified = False
 
         self.setWindowTitle("Edit Event" if self.is_edit else "Add Event")
@@ -219,7 +219,7 @@ class EventFormDialog(QDialog):
             self.lbl_summary_profit.setStyleSheet("font-size: 18px; font-weight: bold; color: #0D9488;")
 
     def load_event_data(self):
-        e = self.event
+        e = self.event_item
         self.event_name_input.setText(e.event_name)
         if e.event_date:
             d = parse_iso_date(e.event_date)
@@ -288,25 +288,25 @@ class EventFormDialog(QDialog):
         qd = self.date_edit.date()
         iso_date = f"{qd.year():04d}-{qd.month():02d}-{qd.day():02d}"
 
-        self.event.event_name = name
-        self.event.event_date = iso_date
-        self.event.client_name = client
-        self.event.location = self.location_input.text().strip()
-        self.event.description = self.desc_input.text().strip()
-        self.event.income = income
-        self.event.employee_salary = salary
-        self.event.employee_salary_note = self.salary_note.text().strip()
-        self.event.transportation = transport
-        self.event.transportation_note = self.transport_note.text().strip()
-        self.event.food = food
-        self.event.food_note = self.food_note.text().strip()
-        self.event.supplier_payments = supplier
-        self.event.supplier_note = self.supplier_note.text().strip()
-        self.event.utilities_others = utilities
-        self.event.utilities_others_note = self.utilities_note.text().strip()
+        self.event_item.event_name = name
+        self.event_item.event_date = iso_date
+        self.event_item.client_name = client
+        self.event_item.location = self.location_input.text().strip()
+        self.event_item.description = self.desc_input.text().strip()
+        self.event_item.income = income
+        self.event_item.employee_salary = salary
+        self.event_item.employee_salary_note = self.salary_note.text().strip()
+        self.event_item.transportation = transport
+        self.event_item.transportation_note = self.transport_note.text().strip()
+        self.event_item.food = food
+        self.event_item.food_note = self.food_note.text().strip()
+        self.event_item.supplier_payments = supplier
+        self.event_item.supplier_note = self.supplier_note.text().strip()
+        self.event_item.utilities_others = utilities
+        self.event_item.utilities_others_note = self.utilities_note.text().strip()
 
         try:
-            save_event(self.event, self.db_path)
+            save_event(self.event_item, self.db_path)
             QMessageBox.information(
                 self,
                 "Event Saved",

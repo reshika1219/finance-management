@@ -52,7 +52,7 @@ class MonthlySummaryView(QWidget):
 
         self.prev_btn = QPushButton("‹")
         self.prev_btn.setFixedSize(36, 36)
-        self.prev_btn.setProperty("class", "secondary-btn")
+        self.prev_btn.setProperty("class", "icon-btn")
         self.prev_btn.setCursor(Qt.PointingHandCursor)
         self.prev_btn.clicked.connect(self.on_prev_month)
         top_bar.addWidget(self.prev_btn)
@@ -64,7 +64,7 @@ class MonthlySummaryView(QWidget):
 
         self.next_btn = QPushButton("›")
         self.next_btn.setFixedSize(36, 36)
-        self.next_btn.setProperty("class", "secondary-btn")
+        self.next_btn.setProperty("class", "icon-btn")
         self.next_btn.setCursor(Qt.PointingHandCursor)
         self.next_btn.clicked.connect(self.on_next_month)
         top_bar.addWidget(self.next_btn)

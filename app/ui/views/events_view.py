@@ -164,13 +164,13 @@ class EventsView(QWidget):
 
             edit_btn = QPushButton("Edit")
             edit_btn.setProperty("class", "secondary-btn")
-            edit_btn.setStyleSheet("padding: 4px 10px; font-size: 12px;")
+            edit_btn.setStyleSheet("padding: 4px 10px; font-size: 12px; min-height: 0px;")
             edit_btn.clicked.connect(lambda _, e=ev: self.on_edit_event(e))
             act_layout.addWidget(edit_btn)
 
             del_btn = QPushButton("Delete")
             del_btn.setProperty("class", "danger-btn")
-            del_btn.setStyleSheet("padding: 4px 10px; font-size: 12px;")
+            del_btn.setStyleSheet("padding: 4px 10px; font-size: 12px; min-height: 0px;")
             del_btn.clicked.connect(lambda _, e=ev: self.on_delete_event(e))
             act_layout.addWidget(del_btn)
 
